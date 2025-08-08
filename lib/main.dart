@@ -6,7 +6,10 @@ import 'firebase_options.dart';
 import 'core/di/injection_container.dart';
 import 'screens/auth/login_screen.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
+import 'features/auth/presentation/bloc/login_ui_bloc.dart';
 import 'features/currency/presentation/bloc/currency_bloc.dart';
+import 'features/currency/presentation/bloc/currency_selector_bloc.dart';
+import 'features/currency/presentation/bloc/amount_input_bloc.dart';
 
 
 void main() async {
@@ -24,6 +27,9 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider<AuthBloc>.value(value: sl.authBloc),
         BlocProvider<CurrencyBloc>.value(value: sl.currencyBloc),
+        BlocProvider<LoginUIBloc>.value(value: sl.loginUIBloc),
+        BlocProvider<CurrencySelectorBloc>.value(value: sl.currencySelectorBloc),
+        BlocProvider<AmountInputBloc>.value(value: sl.amountInputBloc),
       ],
       child: MaterialApp(
         title: 'Currency Converter',

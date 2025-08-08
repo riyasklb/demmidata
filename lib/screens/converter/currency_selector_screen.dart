@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../core/di/injection_container.dart';
+import '../../features/currency/presentation/bloc/currency_selector_bloc.dart';
 import 'amount_input_screen.dart';
 
 class CurrencySelectorScreen extends StatefulWidget {
@@ -10,34 +12,25 @@ class CurrencySelectorScreen extends StatefulWidget {
 }
 
 class _CurrencySelectorScreenState extends State<CurrencySelectorScreen> {
-  String? _fromCurrency;
-  String? _toCurrency;
-  late final Map<String, String> _currencies;
-
   @override
   void initState() {
     super.initState();
-    _currencies = sl.availableCurrencies;
-    _fromCurrency = 'USD';
-    _toCurrency = 'INR';
+    context.read<CurrencySelectorBloc>().add(InitializeCurrencies(sl.availableCurrencies));
   }
 
   void _swapCurrencies() {
-    setState(() {
-      final temp = _fromCurrency;
-      _fromCurrency = _toCurrency;
-      _toCurrency = temp;
-    });
+    context.read<CurrencySelectorBloc>().add(SwapCurrencies());
   }
 
   void _proceedToAmount() {
-    if (_fromCurrency != null && _toCurrency != null) {
+    final state = context.read<CurrencySelectorBloc>().state;
+    if (state is CurrencySelectorLoaded) {
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => AmountInputScreen(
-            fromCurrency: _fromCurrency!,
-            toCurrency: _toCurrency!,
+            fromCurrency: state.fromCurrency,
+            toCurrency: state.toCurrency,
           ),
         ),
       );
@@ -46,116 +39,118 @@ class _CurrencySelectorScreenState extends State<CurrencySelectorScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Select Currencies'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const SizedBox(height: 32),
-            
-            // Header
-            const Text(
-              'Currency Converter',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                height: 1.3,
-              ),
-              textAlign: TextAlign.center,
+    return BlocBuilder<CurrencySelectorBloc, CurrencySelectorState>(
+      builder: (context, state) {
+        if (state is! CurrencySelectorLoaded) {
+          return const Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
             ),
-            const SizedBox(height: 8),
-            Text(
-              'Select currencies to convert',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey.shade600,
-                height: 1.5,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 40),
+          );
+        }
 
-            // Currency Selection Section
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    // From Currency
-                    _buildCurrencyDropdown(
-                      label: 'From Currency',
-                      value: _fromCurrency,
-                      onChanged: (value) {
-                        setState(() {
-                          _fromCurrency = value;
-                          if (_toCurrency == value) {
-                            _toCurrency = _findAlternateCurrency(value);
-                          }
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 24),
-
-                    // Swap Button
-                    _buildSwapButton(),
-                    const SizedBox(height: 24),
-
-                    // To Currency
-                    _buildCurrencyDropdown(
-                      label: 'To Currency',
-                      value: _toCurrency,
-                      onChanged: (value) {
-                        setState(() {
-                          _toCurrency = value;
-                          if (_fromCurrency == value) {
-                            _fromCurrency = _findAlternateCurrency(value);
-                          }
-                        });
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
-            // Continue Button
-            Padding(
-              padding: const EdgeInsets.only(bottom: 32.0, top: 24),
-              child: ElevatedButton(
-                onPressed: _proceedToAmount,
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  backgroundColor: Theme.of(context).primaryColor,
-                ),
-                child: const Text(
-                  'Continue',
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('Select Currencies'),
+          ),
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SizedBox(height: 32),
+                
+                // Header
+                const Text(
+                  'Currency Converter',
                   style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    height: 1.3,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Select currencies to convert',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey.shade600,
+                    height: 1.5,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 40),
+
+                // Currency Selection Section
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        // From Currency
+                        _buildCurrencyDropdown(
+                          label: 'From Currency',
+                          value: state.fromCurrency,
+                          currencies: state.currencies,
+                          onChanged: (value) {
+                            if (value != null) {
+                              context.read<CurrencySelectorBloc>().add(FromCurrencyChanged(value));
+                            }
+                          },
+                        ),
+                        const SizedBox(height: 24),
+
+                        // Swap Button
+                        _buildSwapButton(),
+                        const SizedBox(height: 24),
+
+                        // To Currency
+                        _buildCurrencyDropdown(
+                          label: 'To Currency',
+                          value: state.toCurrency,
+                          currencies: state.currencies,
+                          onChanged: (value) {
+                            if (value != null) {
+                              context.read<CurrencySelectorBloc>().add(ToCurrencyChanged(value));
+                            }
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
+
+                // Continue Button
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 32.0, top: 24),
+                  child: ElevatedButton(
+                    onPressed: _proceedToAmount,
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      backgroundColor: Theme.of(context).primaryColor,
+                    ),
+                    child: const Text(
+                      'Continue',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
-  String? _findAlternateCurrency(String? currentCurrency) {
-    final currencies = _currencies.keys.toList();
-    if (currentCurrency == null || currencies.length < 2) return null;
-    
-    final currentIndex = currencies.indexOf(currentCurrency);
-    return currencies[(currentIndex + 1) % currencies.length];
-  }
+
 
   Widget _buildSwapButton() {
     return Center(
@@ -180,6 +175,7 @@ class _CurrencySelectorScreenState extends State<CurrencySelectorScreen> {
   Widget _buildCurrencyDropdown({
     required String label,
     required String? value,
+    required Map<String, String> currencies,
     required Function(String?) onChanged,
   }) {
     return Column(
@@ -214,7 +210,7 @@ class _CurrencySelectorScreenState extends State<CurrencySelectorScreen> {
               ),
             ),
             icon: const Icon(Icons.arrow_drop_down, size: 28),
-            items: _currencies.entries.map((entry) {
+            items: currencies.entries.map((entry) {
               return DropdownMenuItem<String>(
                 value: entry.key,
                 child: Padding(
