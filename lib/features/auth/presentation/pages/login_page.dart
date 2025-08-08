@@ -167,15 +167,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 8),
 
-                  // Forgot Password
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: _handleResetPassword,
-                      child: const Text('Forgot Password?'),
-                    ),
-                  ),
-                  const SizedBox(height: 24),
+             
 
                   // Sign In Button
                   BlocBuilder<AuthBloc, AuthState>(
@@ -209,18 +201,7 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(height: 16),
 
                   // Sign Up Link
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text("Don't have an account? "),
-                      TextButton(
-                        onPressed: () {
-                          // Navigate to sign up page
-                        },
-                        child: const Text('Sign Up'),
-                      ),
-                    ],
-                  ),
+                
                 ],
               ),
             ),

@@ -17,8 +17,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required this.resetPasswordUseCase,
   }) : super(AuthInitial()) {
     on<SignInRequested>(_onSignInRequested);
-    on<SignOutRequested>(_onSignOutRequested);
-    on<ResetPasswordRequested>(_onResetPasswordRequested);
+    
   }
 
   Future<void> _onSignInRequested(
@@ -38,30 +37,5 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  Future<void> _onSignOutRequested(
-    SignOutRequested event,
-    Emitter<AuthState> emit,
-  ) async {
-    emit(AuthLoading());
-    try {
-      await signOutUseCase();
-      emit(Unauthenticated());
-    } catch (e) {
-      emit(AuthError(e.toString()));
-    }
-  }
 
-  Future<void> _onResetPasswordRequested(
-    ResetPasswordRequested event,
-    Emitter<AuthState> emit,
-  ) async {
-    emit(AuthLoading());
-    try {
-      await resetPasswordUseCase(event.email);
-      // Don't change state, just show success message
-      emit(state);
-    } catch (e) {
-      emit(AuthError(e.toString()));
-    }
-  }
 }
