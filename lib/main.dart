@@ -1,10 +1,12 @@
 import 'package:currency_converter/screens/converter/currency_selector_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'firebase_options.dart';
-import 'services/auth_service.dart';
+import 'core/di/injection_container.dart';
 import 'screens/auth/login_screen.dart';
+import 'features/auth/presentation/bloc/auth_bloc.dart';
+import 'features/currency/presentation/bloc/currency_bloc.dart';
 
 
 void main() async {
@@ -18,14 +20,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Currency Converter',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        useMaterial3: true,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<AuthBloc>.value(value: sl.authBloc),
+        BlocProvider<CurrencyBloc>.value(value: sl.currencyBloc),
+      ],
+      child: MaterialApp(
+        title: 'Currency Converter',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+          useMaterial3: true,
+        ),
+        home: const AuthWrapper(),
       ),
-      home: const AuthWrapper(),
     );
   }
 }
@@ -35,10 +43,8 @@ class AuthWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AuthService authService = AuthService();
-
-    return StreamBuilder<User?>(
-      stream: authService.authStateChanges,
+    return StreamBuilder(
+      stream: sl.authStateChanges,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(

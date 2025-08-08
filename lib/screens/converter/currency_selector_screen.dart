@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../services/currency_service.dart';
+import '../../core/di/injection_container.dart';
 import 'amount_input_screen.dart';
 
 class CurrencySelectorScreen extends StatefulWidget {
@@ -12,11 +12,12 @@ class CurrencySelectorScreen extends StatefulWidget {
 class _CurrencySelectorScreenState extends State<CurrencySelectorScreen> {
   String? _fromCurrency;
   String? _toCurrency;
-  final Map<String, String> _currencies = CurrencyService.availableCurrencies;
+  late final Map<String, String> _currencies;
 
   @override
   void initState() {
     super.initState();
+    _currencies = sl.availableCurrencies;
     _fromCurrency = 'USD';
     _toCurrency = 'INR';
   }
