@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../features/currency/presentation/bloc/currency_bloc.dart';
+import '../../features/currency/presentation/bloc/currency_event.dart';
+import '../../features/currency/presentation/bloc/currency_state.dart';
 import '../../features/currency/presentation/bloc/amount_input_bloc.dart';
 import 'result_screen.dart';
 

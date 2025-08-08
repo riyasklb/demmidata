@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../core/di/injection_container.dart';
-import '../../features/currency/presentation/bloc/currency_selector_bloc.dart';
-import 'amount_input_screen.dart';
+import '../../../../core/di/injection_container.dart';
+import '../bloc/currency_selector_bloc.dart';
+import '../../../../screens/converter/amount_input_screen.dart';
 
-class CurrencySelectorScreen extends StatefulWidget {
-  const CurrencySelectorScreen({super.key});
+class CurrencySelectorPage extends StatefulWidget {
+  const CurrencySelectorPage({super.key});
 
   @override
-  State<CurrencySelectorScreen> createState() => _CurrencySelectorScreenState();
+  State<CurrencySelectorPage> createState() => _CurrencySelectorPageState();
 }
 
-class _CurrencySelectorScreenState extends State<CurrencySelectorScreen> {
+class _CurrencySelectorPageState extends State<CurrencySelectorPage> {
   @override
   void initState() {
     super.initState();
@@ -149,8 +149,6 @@ class _CurrencySelectorScreenState extends State<CurrencySelectorScreen> {
       },
     );
   }
-
-
 
   Widget _buildSwapButton() {
     return Center(

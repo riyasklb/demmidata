@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../features/currency/presentation/bloc/currency_bloc.dart';
-import 'currency_selector_screen.dart';
+import '../../features/currency/presentation/bloc/currency_event.dart';
+import '../../features/currency/presentation/bloc/currency_state.dart';
+import '../../features/currency/presentation/pages/currency_selector_page.dart';
 
 class ResultScreen extends StatefulWidget {
   final String fromCurrency;
@@ -137,7 +139,7 @@ class _ResultScreenState extends State<ResultScreen>
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => const CurrencySelectorScreen(),
+                      builder: (_) => const CurrencySelectorPage(),
                     ),
                   );
                 },
@@ -345,7 +347,7 @@ class _ResultScreenState extends State<ResultScreen>
                           Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => const CurrencySelectorScreen(),
+                              builder: (_) => const CurrencySelectorPage(),
                             ),
                             (route) => false,
                           );

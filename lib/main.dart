@@ -1,5 +1,5 @@
 import 'package:currency_converter/features/auth/presentation/pages/login_page.dart';
-import 'package:currency_converter/screens/converter/currency_selector_screen.dart';
+import 'package:currency_converter/features/currency/presentation/pages/currency_selector_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -61,7 +61,7 @@ class AuthWrapper extends StatelessWidget {
 
         if (snapshot.hasData && snapshot.data != null) {
           // User is logged in
-          return const CurrencySelectorScreen();
+          return const CurrencySelectorPage();
         }
 
         // User is not logged in
