@@ -4,7 +4,6 @@ import '../../features/auth/domain/usecases/sign_in_usecase.dart';
 import '../../features/auth/domain/usecases/sign_out_usecase.dart';
 import '../../features/auth/domain/usecases/reset_password_usecase.dart';
 import '../../features/auth/presentation/bloc/auth_bloc.dart';
-import '../../features/auth/presentation/bloc/login_ui_bloc.dart';
 import '../../features/currency/data/repositories/currency_repository_impl.dart';
 import '../../features/currency/domain/repositories/currency_repository.dart';
 import '../../features/currency/domain/usecases/convert_currency_usecase.dart';
@@ -42,7 +41,6 @@ class InjectionContainer {
     getCurrentRateUseCase: getCurrentRateUseCase,
   );
 
-  late final LoginUIBloc loginUIBloc = LoginUIBloc();
   late final CurrencySelectorBloc currencySelectorBloc = CurrencySelectorBloc();
   late final AmountInputBloc amountInputBloc = AmountInputBloc();
 
@@ -58,7 +56,6 @@ class InjectionContainer {
   void dispose() {
     authBloc.close();
     currencyBloc.close();
-    loginUIBloc.close();
     currencySelectorBloc.close();
     amountInputBloc.close();
   }

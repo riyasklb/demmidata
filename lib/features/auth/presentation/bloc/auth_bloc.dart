@@ -1,73 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:equatable/equatable.dart';
-import '../../domain/entities/user_entity.dart';
 import '../../domain/usecases/sign_in_usecase.dart';
 import '../../domain/usecases/sign_out_usecase.dart';
 import '../../domain/usecases/reset_password_usecase.dart';
-
-// Events
-abstract class AuthEvent extends Equatable {
-  const AuthEvent();
-
-  @override
-  List<Object?> get props => [];
-}
-
-class SignInRequested extends AuthEvent {
-  final String email;
-  final String password;
-
-  const SignInRequested({
-    required this.email,
-    required this.password,
-  });
-
-  @override
-  List<Object?> get props => [email, password];
-}
-
-class SignOutRequested extends AuthEvent {}
-
-class ResetPasswordRequested extends AuthEvent {
-  final String email;
-
-  const ResetPasswordRequested({required this.email});
-
-  @override
-  List<Object?> get props => [email];
-}
-
-// States
-abstract class AuthState extends Equatable {
-  const AuthState();
-
-  @override
-  List<Object?> get props => [];
-}
-
-class AuthInitial extends AuthState {}
-
-class AuthLoading extends AuthState {}
-
-class Authenticated extends AuthState {
-  final UserEntity user;
-
-  const Authenticated(this.user);
-
-  @override
-  List<Object?> get props => [user];
-}
-
-class Unauthenticated extends AuthState {}
-
-class AuthError extends AuthState {
-  final String message;
-
-  const AuthError(this.message);
-
-  @override
-  List<Object?> get props => [message];
-}
+import 'auth_event.dart';
+import 'auth_state.dart';
 
 // BLoC
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
