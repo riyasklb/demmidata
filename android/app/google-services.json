@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "181975686480",
+    "project_id": "thoughtbox-machine-test",
+    "storage_bucket": "thoughtbox-machine-test.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:181975686480:android:2bcd2440c46924369b2055",
+        "android_client_info": {
+          "package_name": "com.example.currency_converter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHID-u7Ltc7ozYZsRcAJyZSFED10AFoOE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:181975686480:android:89ac7804061c476f9b2055",
+        "android_client_info": {
+          "package_name": "com.example.thoughtbox_machine_test"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHID-u7Ltc7ozYZsRcAJyZSFED10AFoOE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
